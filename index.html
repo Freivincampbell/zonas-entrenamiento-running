@@ -1,0 +1,543 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>Zonas de Entrenamiento el ABC</title>
+  <link rel="stylesheet" href="styles.css" />
+</head>
+<body>
+  <main class="container">
+    <section class="hero">
+      <div class="hero-main glass">
+        <div class="badge">🏃‍♂️ Dashboard interactivo de running</div>
+        <h1>Zonas de Entrenamiento el ABC</h1>
+        <p>Aprende a entrenar mejor, no solo más fuerte. Descubre qué significa cada zona, cómo se siente y cómo aplicarla en tus entrenamientos diarios.</p>
+        <div class="quote">“El secreto no es correr siempre duro, sino saber cuándo ir suave, cuándo controlar y cuándo apretar.”</div>
+      </div>
+      <aside class="hero-side glass">
+        <h2>Tu brújula de intensidad</h2>
+        <div class="metric"><span>Base semanal</span><strong>70%-80% suave</strong></div>
+        <div class="metric"><span>Intensidad</span><strong>Controlada y con propósito</strong></div>
+        <div class="metric"><span>Clave</span><strong>Sensaciones + FC</strong></div>
+      </aside>
+    </section>
+
+    <section class="section">
+      <div class="section-title">
+        <div>
+          <h2>Escala visual de zonas</h2>
+          <p>Haz clic en una zona para ver cómo se siente, para qué sirve, ejemplos prácticos, errores comunes y videos recomendados.</p>
+        </div>
+      </div>
+      <div class="zone-scale" id="zoneScale"></div>
+    </section>
+
+    <section class="section content-grid">
+      <article class="zone-detail glass" id="zoneDetail"></article>
+      <aside class="side-stack">
+        <section class="panel glass">
+          <h3>📺 Videos relacionados</h3>
+          <p>Enlaces de búsqueda en YouTube para seguir aprendiendo según la zona seleccionada.</p>
+          <div class="video-list" id="videoList"></div>
+        </section>
+
+        <section class="panel glass">
+          <h3>🫀 Calculadora de frecuencia cardíaca</h3>
+          <p>Ingresa tus datos para estimar rangos por zona. Si no tienes FC máxima, se usa 220 - edad.</p>
+          <form class="calc-form" id="hrForm">
+            <label>Edad
+              <input id="age" type="number" min="8" max="100" placeholder="Ej: 31" />
+            </label>
+            <label>FC máxima opcional
+              <input id="maxHr" type="number" min="80" max="240" placeholder="Ej: 190" />
+            </label>
+            <label>FC en reposo opcional
+              <input id="restHr" type="number" min="30" max="120" placeholder="Ej: 55" />
+            </label>
+            <div class="button-row">
+              <button class="action" type="submit">Calcular zonas</button>
+              <button class="action secondary" type="button" id="resetBtn">Reiniciar</button>
+            </div>
+          </form>
+          <div class="ranges" id="ranges"></div>
+          <div class="notice notice-compact">Esta herramienta es educativa. Las zonas pueden variar según tu condición física, descanso, clima, terreno, estrés, sueño y experiencia. Usa la frecuencia cardíaca como referencia, pero también aprende a escuchar tus sensaciones.</div>
+        </section>
+
+        <section class="panel glass">
+          <h3>Zonas Umbral FC</h3>
+          <p>Calcula rangos por umbral de lactato con una tabla de 6 zonas similar al esquema de COROS.</p>
+          <form class="calc-form" id="thresholdForm">
+            <label>Umbral lactato
+              <input id="thresholdHr" type="number" min="80" max="240" placeholder="Ej: 176" />
+            </label>
+            <label>FC máxima opcional
+              <input id="thresholdMaxHr" type="number" min="80" max="240" placeholder="Ej: 192" />
+            </label>
+            <label>FC en reposo opcional
+              <input id="thresholdRestHr" type="number" min="30" max="120" placeholder="Ej: 48" />
+            </label>
+            <div class="button-row">
+              <button class="action" type="submit">Calcular umbral</button>
+              <button class="action secondary" type="button" id="thresholdResetBtn">Reiniciar</button>
+            </div>
+          </form>
+          <div class="threshold-card" id="thresholdResult" aria-live="polite"></div>
+          <div class="notice notice-compact">Las zonas por umbral usan el umbral de lactato como referencia principal. FC máxima y reposo se muestran como contexto.</div>
+        </section>
+
+        <section class="panel glass">
+          <h3>📋 Resumen rápido</h3>
+          <p>Copia un resumen de la zona seleccionada para compartirlo o guardarlo.</p>
+          <div class="button-row button-row-single">
+            <button class="action" id="copyZoneBtn" type="button">Copiar resumen de zona</button>
+          </div>
+          <div class="toast" id="toast">Resumen copiado ✅</div>
+        </section>
+      </aside>
+    </section>
+
+    <section class="section glass panel">
+      <div class="section-title">
+        <div>
+          <h2>¿Cómo usar las zonas en tu semana?</h2>
+          <p>Ejemplos simples para no convertir todos los entrenamientos en esfuerzos duros.</p>
+        </div>
+      </div>
+      <div class="program-grid">
+        <div class="mini-card"><h3>Principiante</h3><ul><li>3 días por semana.</li><li>2 días en zona 2.</li><li>1 día zona 1 o técnica suave.</li><li>Evitar demasiada intensidad.</li></ul></div>
+        <div class="mini-card"><h3>Intermedio</h3><ul><li>4 a 5 días por semana.</li><li>70%-80% zona 2.</li><li>10%-15% zona 3 o 4.</li><li>5%-10% zona 5.</li></ul></div>
+        <div class="mini-card"><h3>Avanzado</h3><ul><li>5 a 6 días por semana.</li><li>Mayor volumen en zona 2.</li><li>1 sesión de umbral.</li><li>1 sesión de velocidad o VO2max.</li><li>1 fondo largo.</li></ul></div>
+      </div>
+    </section>
+
+    <section class="section glass panel">
+      <div class="section-title">
+        <div>
+          <h2>Escala de percepción de esfuerzo</h2>
+          <p>Usa el RPE como guía cuando el reloj, la frecuencia cardíaca o el ritmo no cuentan toda la historia.</p>
+        </div>
+      </div>
+      <div class="rpe-grid" id="rpeGrid"></div>
+    </section>
+
+    <section class="section glass panel">
+      <div class="section-title">
+        <div>
+          <h2>Regla fácil para corredores</h2>
+          <p>Frases simples para entrenar con más inteligencia, paciencia y propósito.</p>
+        </div>
+      </div>
+      <div class="rules-grid">
+        <div class="mini-card"><h3>🗣️ Conversación</h3><p>“Si no puedes hablar, probablemente no estás en zona 2.”</p></div>
+        <div class="mini-card"><h3>🔥 Control</h3><p>“Si todos tus entrenamientos se sienten duros, probablemente estás entrenando demasiado rápido.”</p></div>
+        <div class="mini-card"><h3>🌱 Base</h3><p>“Correr suave también es entrenar.”</p></div>
+        <div class="mini-card"><h3>🧭 Dirección</h3><p>“Las zonas no son una cárcel, son una brújula.”</p></div>
+      </div>
+    </section>
+
+    <footer>Hecho para corredores que quieren entrenar con inteligencia, paciencia y propósito. <strong>Nos vemos en el siguiente kilómetro.</strong></footer>
+  </main>
+
+  <script>
+    const zones = {
+      1: {
+        id: 1,
+        name: "Zona 1",
+        title: "Recuperación",
+        rpe: "1-2",
+        effort: "Muy suave",
+        hr: "50% - 60%",
+        description: "Es una zona muy suave. Sirve para recuperar, mover las piernas, mejorar circulación y sumar volumen sin fatigar demasiado.",
+        feeling: "Puedes hablar completo, respirar muy fácil y sentir que podrías seguir por mucho tiempo.",
+        purpose: "Recuperar después de entrenamientos fuertes, preparar el cuerpo antes de una sesión exigente y cerrar entrenamientos sin añadir fatiga innecesaria.",
+        workouts: ["Trote regenerativo", "Caminata activa", "Calentamiento", "Enfriamiento", "Día posterior a series o fondo largo"],
+        examples: ["20-30 minutos muy suaves", "10 minutos de calentamiento antes de series", "15 minutos de enfriamiento después de un tempo", "Caminata/trote suave en días de recuperación"],
+        weekly: "Úsala después de entrenamientos fuertes, en calentamientos, enfriamientos y días donde el cuerpo se siente cargado.",
+        mistakes: ["Correrla demasiado rápido", "Creer que no sirve porque se siente muy fácil", "Convertir todos los días suaves en zona 3"],
+        beginner: "Perfecta para crear el hábito, recuperar y aprender a correr sin ansiedad por el ritmo.",
+        intermediate: "Úsala para proteger tus días suaves y llegar fresco a los entrenamientos de calidad.",
+        advanced: "Es clave para absorber carga alta, sumar volumen y sostener consistencia sin acumular fatiga excesiva.",
+        videos: [
+          ["Trote regenerativo para corredores", "https://www.youtube.com/results?search_query=trote+regenerativo+para+corredores"],
+          ["Recuperación activa running", "https://www.youtube.com/results?search_query=recuperacion+activa+running"],
+          ["Calentamiento para corredores", "https://www.youtube.com/results?search_query=calentamiento+para+corredores"],
+          ["Enfriamiento después de correr", "https://www.youtube.com/results?search_query=enfriamiento+despues+de+correr"],
+          ["Easy run recovery running", "https://www.youtube.com/results?search_query=easy+run+recovery+running"]
+        ]
+      },
+      2: {
+        id: 2,
+        name: "Zona 2",
+        title: "Base aeróbica",
+        rpe: "3-4",
+        effort: "Cómoda y sostenible",
+        hr: "60% - 70%",
+        description: "Es la zona más importante para construir resistencia. Ayuda a mejorar la capacidad aeróbica, usar mejor la grasa como energía y correr más tiempo con menos fatiga.",
+        feeling: "Puedes mantener una conversación corta o moderada. La respiración es controlada, cómoda y sostenible.",
+        purpose: "Construir una base aeróbica fuerte, mejorar resistencia, facilitar la recuperación entre sesiones intensas y permitir más volumen semanal.",
+        workouts: ["Rodajes fáciles", "Fondos suaves", "Carrera continua cómoda", "Entrenamientos de construcción aeróbica"],
+        examples: ["40 minutos en zona 2", "8 km suaves conversacionales", "Fondo largo de 12-18 km en zona 2", "60 minutos sin mirar el pace, solo por sensación"],
+        weekly: "Debe ser la base de la mayoría de entrenamientos semanales. Idealmente entre el 70% y 80% del volumen total de carrera puede estar en zona 2.",
+        mistakes: ["Correrla más rápido por ego", "Pensar que zona 2 es perder el tiempo", "Perseguir el pace en vez de la sensación", "No respetar las subidas y dejar que la frecuencia se dispare"],
+        beginner: "Tu zona principal. Te ayuda a mejorar sin castigarte y a formar constancia.",
+        intermediate: "Debe dominar tu semana. Si la respetas, tus sesiones fuertes salen mejor.",
+        advanced: "Es el motor del volumen. Permite sostener semanas grandes sin vivir fatigado.",
+        videos: [
+          ["Zona 2 running", "https://www.youtube.com/results?search_query=zona+2+running"],
+          ["Correr lento para correr rápido", "https://www.youtube.com/results?search_query=correr+lento+para+correr+rapido"],
+          ["Base aeróbica corredores", "https://www.youtube.com/results?search_query=base+aerobica+corredores"],
+          ["Zone 2 training running", "https://www.youtube.com/results?search_query=zone+2+training+running"],
+          ["Entrenamiento aeróbico running", "https://www.youtube.com/results?search_query=entrenamiento+aerobico+running"]
+        ]
+      },
+      3: {
+        id: 3,
+        name: "Zona 3",
+        title: "Ritmo controlado",
+        rpe: "5-6",
+        effort: "Moderada",
+        hr: "70% - 80%",
+        description: "Es una zona moderada. No es suave, pero tampoco máxima. Ayuda a mejorar resistencia a ritmos más vivos, aunque debe usarse con cuidado porque puede generar fatiga si se abusa.",
+        feeling: "Puedes hablar en frases cortas. La respiración ya se siente más marcada, pero todavía controlada.",
+        purpose: "Desarrollar resistencia a ritmos sostenidos, practicar cambios progresivos y acostumbrar al cuerpo a trabajar sin ir al límite.",
+        workouts: ["Ritmos controlados", "Progresivos suaves", "Rodajes moderados", "Segmentos a ritmo de maratón o media maratón"],
+        examples: ["3 x 10 minutos en zona 3", "6 km progresivos terminando controlado", "40 minutos a ritmo estable moderado", "Rodaje con últimos 20 minutos más vivos"],
+        weekly: "Úsala 1 vez por semana o dentro de entrenamientos específicos, especialmente cuando se busca mejorar resistencia sin llegar al esfuerzo de series fuertes.",
+        mistakes: ["Vivir siempre en zona 3", "Hacer todos los rodajes medio fuertes", "No recuperar bien después", "Confundir zona 3 con zona 2"],
+        beginner: "Úsala poco. Primero construye base suave antes de vivir en ritmos moderados.",
+        intermediate: "Ideal para progresivos y bloques controlados, pero no debería dominar tu semana.",
+        advanced: "Puede entrar en bloques específicos, ritmos de carrera o progresivos con intención clara.",
+        videos: [
+          ["Ritmo controlado running", "https://www.youtube.com/results?search_query=ritmo+controlado+running"],
+          ["Carrera progresiva corredores", "https://www.youtube.com/results?search_query=carrera+progresiva+corredores"],
+          ["Tempo suave running", "https://www.youtube.com/results?search_query=tempo+suave+running"],
+          ["Steady state run", "https://www.youtube.com/results?search_query=steady+state+run"],
+          ["Entrenamiento zona 3 running", "https://www.youtube.com/results?search_query=entrenamiento+zona+3+running"]
+        ]
+      },
+      4: {
+        id: 4,
+        name: "Zona 4",
+        title: "Umbral",
+        rpe: "7-8",
+        effort: "Fuerte controlada",
+        hr: "80% - 90%",
+        description: "Es una zona fuerte pero controlada. Ayuda a mejorar el umbral de lactato, es decir, la capacidad de sostener ritmos exigentes durante más tiempo.",
+        feeling: "Hablar es difícil. Puedes decir pocas palabras. La respiración es intensa, pero el esfuerzo todavía se puede controlar por varios minutos.",
+        purpose: "Mejorar la tolerancia a esfuerzos exigentes, sostener ritmos altos durante más tiempo y preparar carreras de 10K, media maratón o esfuerzos tipo tempo.",
+        workouts: ["Tempos", "Intervalos largos", "Series a ritmo de 10K o media maratón", "Bloques de umbral"],
+        examples: ["4 x 5 minutos fuerte controlado", "3 x 2 km a ritmo de tempo", "20 minutos continuos a ritmo umbral", "5 x 1 km con recuperación corta"],
+        weekly: "Úsala 1 vez por semana o cada 10 días dependiendo del nivel del corredor, objetivos y carga semanal.",
+        mistakes: ["Hacerla como si fuera zona 5", "No calentar bien", "Hacer demasiados entrenamientos fuertes en una semana", "Creer que más dolor significa mejor entrenamiento"],
+        beginner: "No debe ser prioridad al inicio. Trabaja técnica, base y progresiones antes de abusar del umbral.",
+        intermediate: "Úsala en bloques cortos y bien controlados, siempre con calentamiento y recuperación.",
+        advanced: "Clave para mejorar ritmos de carrera, pero debe periodizarse con cuidado.",
+        videos: [
+          ["Tempo run corredores", "https://www.youtube.com/results?search_query=tempo+run+corredores"],
+          ["Umbral de lactato running", "https://www.youtube.com/results?search_query=umbral+de+lactato+running"],
+          ["Lactate threshold running workout", "https://www.youtube.com/results?search_query=lactate+threshold+running+workout"],
+          ["Series largas running", "https://www.youtube.com/results?search_query=series+largas+running"],
+          ["Entrenamiento umbral corredores", "https://www.youtube.com/results?search_query=entrenamiento+umbral+corredores"]
+        ]
+      },
+      5: {
+        id: 5,
+        name: "Zona 5",
+        title: "Máxima intensidad",
+        rpe: "9-10",
+        effort: "Muy exigente",
+        hr: "90% - 100%",
+        description: "Es la zona más intensa. Se usa para mejorar velocidad, potencia, VO2max y capacidad de sostener esfuerzos muy fuertes por poco tiempo.",
+        feeling: "Muy exigente. No puedes hablar. La respiración es fuerte y el cuerpo pide bajar el ritmo.",
+        purpose: "Desarrollar velocidad, potencia, VO2max, economía de carrera y capacidad para tolerar esfuerzos cortos de alta intensidad.",
+        workouts: ["Series cortas", "Repeticiones rápidas", "Cuestas explosivas", "Fartlek intenso", "Trabajo de VO2max"],
+        examples: ["10 x 400 metros fuerte", "8 x 30 segundos en cuesta", "6 x 1 minuto rápido", "5 x 800 metros a ritmo fuerte", "Fartlek 1 minuto rápido / 1 minuto suave"],
+        weekly: "Úsala con moderación, normalmente 1 vez por semana o en bloques específicos. Es importante calentar bien y recuperar correctamente.",
+        mistakes: ["Hacer zona 5 sin base aeróbica", "Hacerla demasiadas veces por semana", "No respetar descansos", "Hacerla sin técnica ni control", "No calentar antes"],
+        beginner: "Debe usarse muy poco y preferiblemente como aceleraciones cortas, no como sesiones largas de sufrimiento.",
+        intermediate: "Puede aparecer en fartleks, cuestas o series cortas, cuidando recuperación.",
+        advanced: "Muy útil en bloques específicos de velocidad o VO2max, pero exige planificación y descanso.",
+        videos: [
+          ["VO2max running workout", "https://www.youtube.com/results?search_query=vo2max+running+workout"],
+          ["Series cortas corredores", "https://www.youtube.com/results?search_query=series+cortas+corredores"],
+          ["Fartlek running training", "https://www.youtube.com/results?search_query=fartlek+running+training"],
+          ["Cuestas para corredores", "https://www.youtube.com/results?search_query=cuestas+para+corredores"],
+          ["Speed workout for runners", "https://www.youtube.com/results?search_query=speed+workout+for+runners"]
+        ]
+      }
+    };
+
+    let selectedZone = 2;
+
+    const zoneScale = document.getElementById("zoneScale");
+    const zoneDetail = document.getElementById("zoneDetail");
+    const videoList = document.getElementById("videoList");
+    const rpeGrid = document.getElementById("rpeGrid");
+    const hrForm = document.getElementById("hrForm");
+    const ranges = document.getElementById("ranges");
+    const resetBtn = document.getElementById("resetBtn");
+    const thresholdForm = document.getElementById("thresholdForm");
+    const thresholdResult = document.getElementById("thresholdResult");
+    const thresholdResetBtn = document.getElementById("thresholdResetBtn");
+    const copyZoneBtn = document.getElementById("copyZoneBtn");
+    const toast = document.getElementById("toast");
+
+    function init() {
+      renderZoneButtons();
+      renderRpe();
+      selectZone(2);
+    }
+
+    function renderZoneButtons() {
+      zoneScale.innerHTML = "";
+      Object.values(zones).forEach(zone => {
+        const button = document.createElement("button");
+        button.className = `zone-btn zone-${zone.id}`;
+        button.dataset.zone = zone.id;
+        button.innerHTML = `
+          <span class="zone-kicker">${zone.name}</span>
+          <h3>${zone.title}</h3>
+          <p>${zone.effort}</p>
+          <div class="zone-meta">
+            <span>RPE ${zone.rpe}</span>
+            <span>${zone.hr} FC máx.</span>
+          </div>
+        `;
+        button.addEventListener("click", () => selectZone(zone.id));
+        zoneScale.appendChild(button);
+      });
+    }
+
+    function selectZone(id) {
+      selectedZone = Number(id);
+      const zone = zones[selectedZone];
+      document.documentElement.classList.remove("theme-zone-1", "theme-zone-2", "theme-zone-3", "theme-zone-4", "theme-zone-5");
+      document.documentElement.classList.add(`theme-zone-${zone.id}`);
+      document.querySelectorAll(".zone-btn").forEach(btn => btn.classList.toggle("active", Number(btn.dataset.zone) === selectedZone));
+      renderZoneDetail(zone);
+      renderVideos(zone);
+    }
+
+    function renderZoneDetail(zone) {
+      zoneDetail.classList.remove("animate-in");
+      void zoneDetail.offsetHeight;
+      zoneDetail.innerHTML = `
+        <div class="zone-detail-head">
+          <div>
+            <span class="zone-pill">● ${zone.name} · RPE ${zone.rpe} · ${zone.hr} FC máx.</span>
+            <h2>${zone.title}</h2>
+            <p class="lead">${zone.description}</p>
+          </div>
+        </div>
+        <div class="detail-cards">
+          ${infoCard("🏃‍♂️ Cómo se siente", `<p>${zone.feeling}</p>`)}
+          ${infoCard("🎯 Para qué sirve", `<p>${zone.purpose}</p>`)}
+          ${infoCard("🧪 Entrenamientos", list(zone.workouts))}
+          ${infoCard("📌 Ejemplos prácticos", list(zone.examples))}
+          ${infoCard("📅 Cómo aplicarla en la semana", `<p>${zone.weekly}</p>`, true)}
+          ${infoCard("⚠️ Errores comunes", list(zone.mistakes))}
+          ${infoCard("🌱 Principiantes", `<p>${zone.beginner}</p>`)}
+          ${infoCard("🚀 Intermedios", `<p>${zone.intermediate}</p>`)}
+          ${infoCard("🏆 Avanzados", `<p>${zone.advanced}</p>`, true)}
+        </div>
+      `;
+      zoneDetail.classList.add("animate-in");
+    }
+
+    function infoCard(title, content, full = false) {
+      return `<div class="info-card ${full ? "full" : ""}"><h3>${title}</h3>${content}</div>`;
+    }
+
+    function list(items) {
+      return `<ul>${items.map(item => `<li>${item}</li>`).join("")}</ul>`;
+    }
+
+    function renderVideos(zone) {
+      videoList.innerHTML = zone.videos.map(([title, url]) => `
+        <a class="video-link" href="${url}" target="_blank" rel="noopener noreferrer">
+          <span>${title}</span><strong>↗</strong>
+        </a>
+      `).join("");
+    }
+
+    function renderRpe() {
+      rpeGrid.innerHTML = Object.values(zones).map(zone => `
+        <div class="mini-card zone-card-${zone.id}">
+          <h3>${zone.name}</h3>
+          <p><strong>${zone.title}</strong></p>
+          <p>RPE ${zone.rpe}</p>
+          <p>${zone.effort}</p>
+        </div>
+      `).join("");
+    }
+
+    hrForm.addEventListener("submit", event => {
+      event.preventDefault();
+      const age = Number(document.getElementById("age").value);
+      const maxInput = Number(document.getElementById("maxHr").value);
+      const restInput = Number(document.getElementById("restHr").value);
+
+      if (!age || age < 8 || age > 100) {
+        alert("Ingresa una edad válida entre 8 y 100 años.");
+        return;
+      }
+
+      const maxHr = maxInput || (220 - age);
+      renderHrRanges(maxHr, restInput || null);
+    });
+
+    resetBtn.addEventListener("click", () => {
+      hrForm.reset();
+      ranges.classList.remove("is-visible");
+      ranges.innerHTML = "";
+    });
+
+    function renderHrRanges(maxHr, restHr) {
+      const percents = [[50,60], [60,70], [70,80], [80,90], [90,100]];
+      ranges.classList.add("is-visible");
+      ranges.innerHTML = Object.values(zones).map((zone, index) => {
+        const [minP, maxP] = percents[index];
+        const min = restHr ? Math.round(((maxHr - restHr) * (minP / 100)) + restHr) : Math.round(maxHr * (minP / 100));
+        const max = restHr ? Math.round(((maxHr - restHr) * (maxP / 100)) + restHr) : Math.round(maxHr * (maxP / 100));
+        return `
+          <div class="range-row">
+            <span>${zone.name}</span>
+            <div class="bar bar-zone-${zone.id}"></div>
+            <strong>${min}-${max} bpm</strong>
+          </div>
+        `;
+      }).join("") + `<p class="ranges-note">Fórmula usada: ${restHr ? "Karvonen con FC de reposo" : "porcentaje directo de FC máxima"}. Es una estimación general.</p>`;
+    }
+
+    thresholdForm.addEventListener("submit", event => {
+      event.preventDefault();
+      const thresholdHr = Math.round(Number(document.getElementById("thresholdHr").value));
+      const maxHr = Math.round(Number(document.getElementById("thresholdMaxHr").value));
+      const restHr = Math.round(Number(document.getElementById("thresholdRestHr").value));
+
+      if (!thresholdHr || thresholdHr < 80 || thresholdHr > 240) {
+        alert("Ingresa un umbral de lactato válido entre 80 y 240 bpm.");
+        return;
+      }
+
+      if (maxHr && thresholdHr > maxHr) {
+        alert("El umbral de lactato no debería ser mayor que la FC máxima.");
+        return;
+      }
+
+      if (maxHr && restHr && restHr >= maxHr) {
+        alert("La FC en reposo debe ser menor que la FC máxima.");
+        return;
+      }
+
+      renderThresholdRanges(thresholdHr, maxHr || null, restHr || null);
+    });
+
+    thresholdResetBtn.addEventListener("click", () => {
+      thresholdForm.reset();
+      thresholdResult.classList.remove("is-visible");
+      thresholdResult.innerHTML = "";
+    });
+
+    function renderThresholdRanges(thresholdHr, maxHr, restHr) {
+      const limits = getThresholdLimits(thresholdHr);
+      thresholdResult.classList.add("is-visible");
+      thresholdResult.innerHTML = `
+        <div class="threshold-summary">
+          ${thresholdStat("Umbral Lactato", thresholdHr)}
+          ${thresholdStat("FC Máxima", maxHr)}
+          ${thresholdStat("FC Reposo", restHr)}
+        </div>
+        <div class="threshold-table">
+          <div class="threshold-head">
+            <span>Zonas FC</span>
+            <span>Rango de FC(bpm)</span>
+          </div>
+          ${limits.map(item => `
+            <div class="threshold-row">
+              <span class="threshold-zone"><span class="zone-dot dot-zone-${item.id}"></span>Zona ${item.id}</span>
+              <strong>${item.range}</strong>
+            </div>
+          `).join("")}
+        </div>
+      `;
+    }
+
+    function getThresholdLimits(thresholdHr) {
+      const z2Start = Math.ceil(thresholdHr * 0.85);
+      const z3Start = Math.ceil(thresholdHr * 0.90);
+      const z4Start = Math.ceil(thresholdHr * 0.95);
+      const z5Start = Math.ceil(thresholdHr * 0.99);
+
+      return [
+        { id: 1, range: `&lt; ${z2Start}` },
+        { id: 2, range: `${z2Start} - ${z3Start - 1}` },
+        { id: 3, range: `${z3Start} - ${z4Start - 1}` },
+        { id: 4, range: `${z4Start} - ${z5Start - 1}` },
+        { id: 5, range: `${z5Start} - ${thresholdHr}` },
+        { id: 6, range: `&gt; ${thresholdHr}` }
+      ];
+    }
+
+    function thresholdStat(label, value) {
+      return `
+        <div class="threshold-stat">
+          <span>${label}</span>
+          <strong>${value || "--"}</strong>
+          <small>bpm</small>
+        </div>
+      `;
+    }
+
+    copyZoneBtn.addEventListener("click", async () => {
+      const zone = zones[selectedZone];
+      const text = `
+${zone.name} - ${zone.title}
+RPE: ${zone.rpe}
+FC aproximada: ${zone.hr} de FC máxima
+
+Descripción:
+${zone.description}
+
+Cómo se siente:
+${zone.feeling}
+
+Para qué sirve:
+${zone.purpose}
+
+Entrenamientos:
+${zone.workouts.map(item => `- ${item}`).join("\n")}
+
+Ejemplos:
+${zone.examples.map(item => `- ${item}`).join("\n")}
+
+Errores comunes:
+${zone.mistakes.map(item => `- ${item}`).join("\n")}
+
+Nos vemos en el siguiente kilómetro.
+      `.trim();
+
+      try {
+        await navigator.clipboard.writeText(text);
+        showToast();
+      } catch (error) {
+        const textarea = document.createElement("textarea");
+        textarea.value = text;
+        document.body.appendChild(textarea);
+        textarea.select();
+        document.execCommand("copy");
+        document.body.removeChild(textarea);
+        showToast();
+      }
+    });
+
+    function showToast() {
+      toast.classList.add("is-visible");
+      setTimeout(() => toast.classList.remove("is-visible"), 2200);
+    }
+
+    init();
+  </script>
+</body>
+</html>
