@@ -65,28 +65,6 @@
         </section>
 
         <section class="panel glass">
-          <h3>Zonas Umbral FC</h3>
-          <p>Calcula rangos por umbral de lactato con una tabla de 6 zonas similar al esquema de COROS.</p>
-          <form class="calc-form" id="thresholdForm">
-            <label>Umbral lactato
-              <input id="thresholdHr" type="number" min="80" max="240" placeholder="Ej: 176" />
-            </label>
-            <label>FC máxima opcional
-              <input id="thresholdMaxHr" type="number" min="80" max="240" placeholder="Ej: 192" />
-            </label>
-            <label>FC en reposo opcional
-              <input id="thresholdRestHr" type="number" min="30" max="120" placeholder="Ej: 48" />
-            </label>
-            <div class="button-row">
-              <button class="action" type="submit">Calcular umbral</button>
-              <button class="action secondary" type="button" id="thresholdResetBtn">Reiniciar</button>
-            </div>
-          </form>
-          <div class="threshold-card" id="thresholdResult" aria-live="polite"></div>
-          <div class="notice notice-compact">Las zonas por umbral usan el umbral de lactato como referencia principal. FC máxima y reposo se muestran como contexto.</div>
-        </section>
-
-        <section class="panel glass">
           <h3>📋 Resumen rápido</h3>
           <p>Copia un resumen de la zona seleccionada para compartirlo o guardarlo.</p>
           <div class="button-row button-row-single">
@@ -95,6 +73,52 @@
           <div class="toast" id="toast">Resumen copiado ✅</div>
         </section>
       </aside>
+    </section>
+
+    <section class="section quick-tools">
+      <div class="section-title">
+        <div>
+          <h2>Decisiones simples para entrenar mejor</h2>
+          <p>Herramientas rápidas para elegir intensidad sin convertir cada salida en una prueba complicada.</p>
+        </div>
+      </div>
+      <div class="quick-tools-grid">
+        <article class="mini-card quick-tool-card">
+          <h3>Semana 80/20</h3>
+          <p>Elige cuántos días corres y recibe una guía suave de distribución semanal.</p>
+          <div class="segmented-control" role="group" aria-label="Días de carrera por semana">
+            <button class="segment" type="button" data-days="3">3 días</button>
+            <button class="segment active" type="button" data-days="4">4 días</button>
+            <button class="segment" type="button" data-days="5">5 días</button>
+            <button class="segment" type="button" data-days="6">6 días</button>
+          </div>
+          <div class="quick-result" id="weekResult" aria-live="polite"></div>
+        </article>
+
+        <article class="mini-card quick-tool-card">
+          <h3>Semáforo de hoy</h3>
+          <p>Marca cómo llegas al entrenamiento y ajusta la zona con calma.</p>
+          <div class="check-list" id="readinessChecks">
+            <label class="check-item"><input type="checkbox" data-readiness="1" />Dormí poco o mal</label>
+            <label class="check-item"><input type="checkbox" data-readiness="1" />Piernas pesadas</label>
+            <label class="check-item"><input type="checkbox" data-readiness="1" />Estrés alto</label>
+            <label class="check-item"><input type="checkbox" data-readiness="2" />FC reposo más alta</label>
+            <label class="check-item"><input type="checkbox" data-readiness="3" data-flag="pain" />Dolor que cambia la pisada</label>
+          </div>
+          <div class="quick-result readiness-result" id="readinessResult" aria-live="polite"></div>
+        </article>
+
+        <article class="mini-card quick-tool-card">
+          <h3>Test conversacional</h3>
+          <p>Una guía rápida cuando el reloj no cuenta toda la historia.</p>
+          <div class="talk-test">
+            <div class="talk-row"><strong>Frases completas</strong><span>Zona 1-2</span></div>
+            <div class="talk-row"><strong>Frases cortas</strong><span>Zona 3</span></div>
+            <div class="talk-row"><strong>Palabras sueltas</strong><span>Zona 4</span></div>
+            <div class="talk-row"><strong>No puedes hablar</strong><span>Zona 5</span></div>
+          </div>
+        </article>
+      </div>
     </section>
 
     <section class="section glass panel">
@@ -277,16 +301,42 @@
     const hrForm = document.getElementById("hrForm");
     const ranges = document.getElementById("ranges");
     const resetBtn = document.getElementById("resetBtn");
-    const thresholdForm = document.getElementById("thresholdForm");
-    const thresholdResult = document.getElementById("thresholdResult");
-    const thresholdResetBtn = document.getElementById("thresholdResetBtn");
+    const weekSegments = document.querySelectorAll("[data-days]");
+    const weekResult = document.getElementById("weekResult");
+    const readinessInputs = document.querySelectorAll("[data-readiness]");
+    const readinessResult = document.getElementById("readinessResult");
     const copyZoneBtn = document.getElementById("copyZoneBtn");
     const toast = document.getElementById("toast");
+
+    const weekPlans = {
+      3: {
+        title: "Simple y sostenible",
+        focus: "2 suaves + 1 con intención",
+        items: ["2 rodajes en zona 1-2", "1 día con progresivo suave o bloques cortos en zona 3", "Deja al menos un día libre entre esfuerzos"]
+      },
+      4: {
+        title: "Base primero",
+        focus: "3 suaves + 1 calidad",
+        items: ["3 días fáciles en zona 1-2", "1 sesión de umbral, cuestas o cambios controlados", "Si estás cansado, convierte la calidad en zona 2"]
+      },
+      5: {
+        title: "Consistencia con control",
+        focus: "4 suaves + 1 calidad",
+        items: ["3 rodajes suaves", "1 fondo cómodo en zona 2", "1 sesión de calidad bien separada del fondo"]
+      },
+      6: {
+        title: "Volumen con paciencia",
+        focus: "5 suaves + 1 calidad",
+        items: ["4 días en zona 1-2", "1 fondo largo cómodo", "1 sesión intensa corta y bien recuperada"]
+      }
+    };
 
     function init() {
       renderZoneButtons();
       renderRpe();
       selectZone(2);
+      renderWeekGuide(4);
+      renderReadiness();
     }
 
     function renderZoneButtons() {
@@ -410,83 +460,62 @@
       }).join("") + `<p class="ranges-note">Fórmula usada: ${restHr ? "Karvonen con FC de reposo" : "porcentaje directo de FC máxima"}. Es una estimación general.</p>`;
     }
 
-    thresholdForm.addEventListener("submit", event => {
-      event.preventDefault();
-      const thresholdHr = Math.round(Number(document.getElementById("thresholdHr").value));
-      const maxHr = Math.round(Number(document.getElementById("thresholdMaxHr").value));
-      const restHr = Math.round(Number(document.getElementById("thresholdRestHr").value));
-
-      if (!thresholdHr || thresholdHr < 80 || thresholdHr > 240) {
-        alert("Ingresa un umbral de lactato válido entre 80 y 240 bpm.");
-        return;
-      }
-
-      if (maxHr && thresholdHr > maxHr) {
-        alert("El umbral de lactato no debería ser mayor que la FC máxima.");
-        return;
-      }
-
-      if (maxHr && restHr && restHr >= maxHr) {
-        alert("La FC en reposo debe ser menor que la FC máxima.");
-        return;
-      }
-
-      renderThresholdRanges(thresholdHr, maxHr || null, restHr || null);
+    weekSegments.forEach(button => {
+      button.addEventListener("click", () => {
+        weekSegments.forEach(item => item.classList.toggle("active", item === button));
+        renderWeekGuide(Number(button.dataset.days));
+      });
     });
 
-    thresholdResetBtn.addEventListener("click", () => {
-      thresholdForm.reset();
-      thresholdResult.classList.remove("is-visible");
-      thresholdResult.innerHTML = "";
-    });
-
-    function renderThresholdRanges(thresholdHr, maxHr, restHr) {
-      const limits = getThresholdLimits(thresholdHr);
-      thresholdResult.classList.add("is-visible");
-      thresholdResult.innerHTML = `
-        <div class="threshold-summary">
-          ${thresholdStat("Umbral Lactato", thresholdHr)}
-          ${thresholdStat("FC Máxima", maxHr)}
-          ${thresholdStat("FC Reposo", restHr)}
-        </div>
-        <div class="threshold-table">
-          <div class="threshold-head">
-            <span>Zonas FC</span>
-            <span>Rango de FC(bpm)</span>
-          </div>
-          ${limits.map(item => `
-            <div class="threshold-row">
-              <span class="threshold-zone"><span class="zone-dot dot-zone-${item.id}"></span>Zona ${item.id}</span>
-              <strong>${item.range}</strong>
-            </div>
-          `).join("")}
-        </div>
+    function renderWeekGuide(days) {
+      const plan = weekPlans[days];
+      weekResult.innerHTML = `
+        <span class="result-eyebrow">${days} días por semana</span>
+        <strong>${plan.title}</strong>
+        <p>${plan.focus}</p>
+        <ul class="plan-list">
+          ${plan.items.map(item => `<li>${item}</li>`).join("")}
+        </ul>
       `;
     }
 
-    function getThresholdLimits(thresholdHr) {
-      const z2Start = Math.ceil(thresholdHr * 0.85);
-      const z3Start = Math.ceil(thresholdHr * 0.90);
-      const z4Start = Math.ceil(thresholdHr * 0.95);
-      const z5Start = Math.ceil(thresholdHr * 0.99);
+    readinessInputs.forEach(input => input.addEventListener("change", renderReadiness));
 
-      return [
-        { id: 1, range: `&lt; ${z2Start}` },
-        { id: 2, range: `${z2Start} - ${z3Start - 1}` },
-        { id: 3, range: `${z3Start} - ${z4Start - 1}` },
-        { id: 4, range: `${z4Start} - ${z5Start - 1}` },
-        { id: 5, range: `${z5Start} - ${thresholdHr}` },
-        { id: 6, range: `&gt; ${thresholdHr}` }
-      ];
-    }
+    function renderReadiness() {
+      const checked = Array.from(readinessInputs).filter(input => input.checked);
+      const score = checked.reduce((total, input) => total + Number(input.dataset.readiness), 0);
+      const hasPain = checked.some(input => input.dataset.flag === "pain");
+      let state = {
+        tone: "green",
+        title: "Verde: sigue el plan",
+        text: "Buen día para entrenar según lo previsto. Mantén las zonas fáciles realmente fáciles.",
+        suggestion: "Si toca intensidad, calienta bien y revisa sensaciones en los primeros minutos."
+      };
 
-    function thresholdStat(label, value) {
-      return `
-        <div class="threshold-stat">
-          <span>${label}</span>
-          <strong>${value || "--"}</strong>
-          <small>bpm</small>
-        </div>
+      if (score >= 2) {
+        state = {
+          tone: "yellow",
+          title: "Amarillo: baja una marcha",
+          text: "Tu cuerpo está pidiendo margen. Zona 1-2 o una versión más corta puede ser suficiente.",
+          suggestion: "Evita convertir un día cansado en una sesión de intensidad."
+        };
+      }
+
+      if (score >= 4 || hasPain) {
+        state = {
+          tone: "red",
+          title: "Rojo: recuperación inteligente",
+          text: "Hoy puede sumar más recuperar que empujar. Caminar, movilidad o descanso también cuenta.",
+          suggestion: "Si hay dolor que cambia tu pisada, mejor no forzar."
+        };
+      }
+
+      readinessResult.className = `quick-result readiness-result readiness-${state.tone}`;
+      readinessResult.innerHTML = `
+        <span class="result-eyebrow">${checked.length ? `${checked.length} señal(es) marcada(s)` : "Sin señales marcadas"}</span>
+        <strong>${state.title}</strong>
+        <p>${state.text}</p>
+        <small>${state.suggestion}</small>
       `;
     }
 
